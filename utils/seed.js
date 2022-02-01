@@ -1,5 +1,6 @@
 const connection = require('../config/connection');
-const { User, Thought } = require('../models');
+const { User } = require('../models/User');
+const { Thought } = require('../models/Thought')
 const { usernames, emails, thoughts } = require('./data');
 
 
@@ -47,7 +48,7 @@ connection.once('open', async () => {
 
   console.table(user);
   console.table(userThought);
-  console.info('Seeding complete!');
+  console.info('Seeding complete! 🌱');
   process.exit(0);
 
 
