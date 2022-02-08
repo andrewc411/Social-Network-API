@@ -1,17 +1,16 @@
-const connection = require('../server.js');
-const { User } = require('../models/User');
-const { Thought } = require('../models/Thought')
+const connection = require('../config/connection.js');
 const { usernames, emails, thoughts } = require('./data');
+const { User, Thought } = require('../models')
 
 
 const user = [];
 const userThought = [];
 insertUsers();
-insertThought();
+insertThoughts();
 
 
-function insertUsers(){
-    for(let i=0; i < usernames.length; i++) {
+function insertUsers() {
+    for (let i = 0; i < usernames.length; i++) {
         const userObj = {
             username: usernames[i],
             email: emails[i]
@@ -20,36 +19,37 @@ function insertUsers(){
     }
 };
 
-function insertThought(){
-    for(let i=0; i < usernames.length; i++) {
+function insertThoughts() {
+    for (let i = 0; i < thoughts.length; i++) {
+        const thought = thoughts[i];
         const thoughtObj = {
-            thoughtName: thoughts[i],
-            username: usernames[i],
+            thoughtText: thought.thoughtText,
+            username: thought.username,
         }
         userThought.push(thoughtObj)
     }
 };
 
+
 connection.on('error', (err) => err);
 
 connection.once('open', async () => {
-  console.log('connected');
-  console.log(userThought)
+    console.log('connected');
 
-  
-  await User.deleteMany({});
 
-  
-  await Thought.deleteMany({});
+    await User.deleteMany({});
 
-  await User.insertMany(user);
 
-  await Thought.insertMany(userThought);
+    await Thought.deleteMany({});
 
-  console.table(user);
-  console.table(userThought);
-  console.info('Seeding complete! 🌱');
-  process.exit(0);
+    await User.insertMany(user);
+
+    await Thought.insertMany(userThought);
+
+    console.table(user);
+    console.table(userThought);
+    console.info('Seeding complete! 🌱');
+    process.exit(0);
 
 
 });

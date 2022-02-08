@@ -16,11 +16,28 @@ const emails = [
 
 
 const thoughts = [
-    'This is me thinking of thoughts',
-    'Wow that was crazy',
-    'Maybe I will do it tomorrow',
-    'Mmmmm that is good coffee',
-    'Kill all humans'
+    {
+        thoughtText: 'This is me thinking of thoughts',
+        username: 'andrewmagic'
+    },
+    {
+        thoughtText: 'Wow that was crazy',
+        username: 'tinytim'
+    },
+    {
+        thoughtText:
+            'Maybe I will do it tomorrow',
+        username: 'omicron'
+    },
+    {
+        thoughtText: 'Mmmmm that is good coffee',
+        username: 'moana'
+    },
+    {
+        thoughtText: 'Kill all humans',
+        username: 'deadlysnowman'
+    }
+
 ]
 
 module.exports = { usernames, emails, thoughts };
