@@ -1,51 +1,48 @@
-const { type } = require('express/lib/response');
 const { Schema, model } = require('mongoose');
-const thoughtSchema = require('./Thought');
 
-
-const userSchema = new Schema(
-  {
-    username: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
-    },
-    thoughts: [      
+const UserSchema = new Schema(
+    {
+        username: {
+            type: String,
+            required: true,
+            trim: true,
+            unique: true
+        },
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+            validate: {
+                validator: function (v) {
+                    return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(v);
+                },
+                message: props => `${props.value} is not a valid email!`
+            }
+        },
+        thoughts: [
             {
-              type: Schema.Types.ObjectId,
-              ref: 'thoughts',
-          }
-    ],
-    friends: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'user',
-    }
-  ]
-  },
-  {
-    toJSON: {
-      getters: true,
-      virtuals: true,
+                type: Schema.Types.ObjectId,
+                ref: 'Thoughts'
+            }
+        ],
+        friends: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'User'
+            }
+        ]
     },
-  }
+    {
+        toJSON: {
+            virtuals: true
+        }
+    }
 );
 
-userSchema
-  .virtual('friendCount')
-  .get(function () {
+UserSchema.virtual('friendCount').get(function () {
     return this.friends.length;
-  })
-  
+});
 
-
-const User = model('user', userSchema);
+const User = model('User', UserSchema);
 
 module.exports = User;
